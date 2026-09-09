@@ -1,0 +1,28 @@
+data: train 1200 val 200 test 300  (30.0s)
+train class pixel frequency: [9.2348e-01 2.1960e-02 1.6160e-02 8.3000e-04 3.7560e-02]
+class weights: [0.094 0.609 0.709 3.123 0.465]
+/home/claude/samudra/src/train.py:108: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at /__w/pytorch/pytorch/torch/csrc/autograd/generated/python_variable_methods.cpp:822.)
+  run += float(loss)
+epoch  1  loss 2.2543  val IoU oil 0.117 look-alike 0.025 ship 0.417 land 0.932 sea 0.813  (332s)
+epoch  2  loss 1.3890  val IoU oil 0.326 look-alike 0.007 ship 0.352 land 0.842 sea 0.943  (331s)
+epoch  3  loss 0.9373  val IoU oil 0.433 look-alike 0.073 ship 0.798 land 0.945 sea 0.951  (331s)
+epoch  4  loss 0.7290  val IoU oil 0.303 look-alike 0.044 ship 0.745 land 0.181 sea 0.763  (330s)
+epoch  5  loss 0.6424  val IoU oil 0.248 look-alike 0.050 ship 0.868 land 0.132 sea 0.576  (327s)
+epoch  6  loss 0.5806  val IoU oil 0.492 look-alike 0.092 ship 0.858 land 0.152 sea 0.641  (328s)
+epoch  7  loss 0.5399  val IoU oil 0.596 look-alike 0.076 ship 0.919 land 0.967 sea 0.867  (331s)
+epoch  8  loss 0.5106  val IoU oil 0.471 look-alike 0.031 ship 0.978 land 0.927 sea 0.372  (336s)
+epoch  9  loss 0.4664  val IoU oil 0.598 look-alike 0.059 ship 0.986 land 0.981 sea 0.754  (329s)
+epoch 10  loss 0.4571  val IoU oil 0.640 look-alike 0.084 ship 0.647 land 0.900 sea 0.833  (329s)
+epoch 11  loss 0.4320  val IoU oil 0.714 look-alike 0.173 ship 0.995 land 0.981 sea 0.936  (328s)
+epoch 12  loss 0.4053  val IoU oil 0.697 look-alike 0.130 ship 0.989 land 0.985 sea 0.908  (333s)
+epoch 13  loss 0.3688  val IoU oil 0.691 look-alike 0.114 ship 0.996 land 0.982 sea 0.883  (402s)
+epoch 14  loss 0.3500  val IoU oil 0.699 look-alike 0.128 ship 0.997 land 0.982 sea 0.897  (414s)
+
+=== HELD-OUT TEST SET (300 scenes, never seen) ===
+  sea         IoU 0.961  precision 0.991  recall 0.970
+  oil spill   IoU 0.737  precision 0.825  recall 0.873
+  look-alike  IoU 0.228  precision 0.275  recall 0.570
+  ship        IoU 0.992  precision 0.994  recall 0.998
+  land        IoU 0.978  precision 0.983  recall 0.995
+  mean IoU 0.779   parameters 753,385   wall 4839 s
