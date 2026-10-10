@@ -39,7 +39,8 @@ def _load_krestenitis(split, size):
 
     img_dir = os.path.join(DATA_ROOT, split, "images")
     lbl_dir = os.path.join(DATA_ROOT, split, "labels_1D")
-    names = sorted(os.listdir(img_dir))
+    names = sorted(n for n in os.listdir(img_dir) if n.lower().endswith((".jpg", ".jpeg", ".png", ".tif", ".tiff")))
+    if not names: raise ValueError("No images found in " + img_dir)
     imgs = np.zeros((len(names), size, size), dtype=np.float32)
     masks = np.zeros((len(names), size, size), dtype=np.uint8)
     for i, nm in enumerate(names):
@@ -48,12 +49,19 @@ def _load_krestenitis(split, size):
             (size, size), Image.NEAREST
         )
         imgs[i] = np.asarray(im, dtype=np.float32) / 255.0
-        masks[i] = np.asarray(lb, dtype=np.uint8)
+        labels = np.asarray(lb)
+        if labels.ndim != 2 or not np.isin(labels, np.arange(5)).all():
+            raise ValueError("Mask must contain single-channel class IDs 0..4: " + nm)
+        masks[i] = labels.astype(np.uint8)
     return imgs, masks, [{} for _ in names]
 
 
 def load_split(split, source="sim", size=256, n=None):
     """split in {'train','val','test'}.  Returns (images, masks, metas)."""
+    if source not in {"sim", "krestenitis"}:
+        raise ValueError("Unknown dataset source: " + source)
+    if split not in {"train", "val", "test"}:
+        raise ValueError("Unknown split: " + split)
     if source == "krestenitis":
         return _load_krestenitis(split, size)
     counts = {"train": 1200, "val": 200, "test": 300}

@@ -50,20 +50,20 @@ def grade(inc):
                         if (strong or dets) else
                         "No oil-class detection cleared the threshold. No vessel named."),
         }
-    if not dets:
+    if not dets or not any(c["status"] == "CANDIDATE" for c in dets[0]["candidates"]):
         return {
             "kind": "discharge",
             "outcome": "missed",
             "correct": False,
-            "summary": "A discharge was injected and the segmenter did not find it above threshold.",
+            "summary": "A discharge was injected but the pipeline produced no eligible vessel ranking.",
         }
     top = dets[0]["candidates"][0]
-    hit = bool(top.get("truth", "").startswith("guilty"))
+    hit = bool(top["status"] == "CANDIDATE" and (top.get("truth") or "").startswith("guilty"))
     d = dets[0]
     err = None
     usable = [f for f in d["drift"]["frames"] if f["usable"]]
-    if usable:
-        h = int(round(d.get("release_hour_estimate", 0)))
+    if usable and d.get("release_hour_estimate") is not None:
+        h = int(round(d.get("release_hour_estimate") or 0))
         best = min(usable, key=lambda f: abs(f["hours_back"] - h))
         err = round(geo.haversine_km(best["lat"], best["lon"],
                                      truth["true_release_lat"], truth["true_release_lon"]), 2)
@@ -72,9 +72,9 @@ def grade(inc):
         "outcome": "vessel recovered" if hit else "wrong vessel ranked first",
         "correct": hit,
         "origin_error_km": err,
-        "summary": ("Ranked %s first at %.0f%%; %d of %d other vessels cleared."
+        "summary": ("Ranked %s first with index %.0f/100; %d of %d other vessels excluded."
                     % (top["name"], top["score_pct"],
-                       sum(1 for c in dets[0]["candidates"][1:] if c["status"] == "CLEARED"),
+                       sum(1 for c in dets[0]["candidates"][1:] if c["status"] == "EXCLUDED"),
                        len(dets[0]["candidates"]) - 1)),
     }
 
@@ -132,6 +132,7 @@ def main():
         "wrong_vessel": sum(1 for s in disc if s["grade"]["outcome"] == "wrong vessel ranked first"),
         "false_alarms": sum(1 for s in clean if not s["grade"]["correct"]),
         "median_origin_error_km": round(float(np.median(errs)), 2) if errs else None,
+        "protocol": "observation_boundary_v2",
         "built_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     }
     with open(args.out, "w") as f:

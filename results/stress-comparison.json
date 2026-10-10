@@ -1,0 +1,1277 @@
+{
+  "protocol": "observation_boundary_v2",
+  "data_source": "synthetic",
+  "traffic_mode": "random",
+  "seed_base": 920000,
+  "parameter_seed": 20261010,
+  "comparisons": {
+    "visible_slick_nearest": {
+      "correct": 22,
+      "total_incidents": 24,
+      "ranked": 24,
+      "abstained_or_missed": 0,
+      "rank1_over_all": 0.9167,
+      "rank1_when_ranked": 0.9167,
+      "rank1_over_all_95pct_wilson": [
+        0.7415,
+        0.9768
+      ]
+    },
+    "drift_geometry": {
+      "correct": 24,
+      "total_incidents": 24,
+      "ranked": 24,
+      "abstained_or_missed": 0,
+      "rank1_over_all": 1.0,
+      "rank1_when_ranked": 1.0,
+      "rank1_over_all_95pct_wilson": [
+        0.862,
+        1
+      ]
+    },
+    "full": {
+      "correct": 24,
+      "total_incidents": 24,
+      "ranked": 24,
+      "abstained_or_missed": 0,
+      "rank1_over_all": 1.0,
+      "rank1_when_ranked": 1.0,
+      "rank1_over_all_95pct_wilson": [
+        0.862,
+        1
+      ]
+    },
+    "no_axis": {
+      "correct": 24,
+      "total_incidents": 24,
+      "ranked": 24,
+      "abstained_or_missed": 0,
+      "rank1_over_all": 1.0,
+      "rank1_when_ranked": 1.0,
+      "rank1_over_all_95pct_wilson": [
+        0.862,
+        1
+      ]
+    },
+    "no_ais_gap": {
+      "correct": 24,
+      "total_incidents": 24,
+      "ranked": 24,
+      "abstained_or_missed": 0,
+      "rank1_over_all": 1.0,
+      "rank1_when_ranked": 1.0,
+      "rank1_over_all_95pct_wilson": [
+        0.862,
+        1
+      ]
+    },
+    "no_type_prior": {
+      "correct": 24,
+      "total_incidents": 24,
+      "ranked": 24,
+      "abstained_or_missed": 0,
+      "rank1_over_all": 1.0,
+      "rank1_when_ranked": 1.0,
+      "rank1_over_all_95pct_wilson": [
+        0.862,
+        1
+      ]
+    }
+  },
+  "incidents": 24,
+  "clean_scenes": 8,
+  "detection_rate": 1.0,
+  "rank1_accuracy": 1.0,
+  "rank1_over_all": 1.0,
+  "counts": {
+    "discharges": 24,
+    "detected": 24,
+    "rank1": 24,
+    "false_alarms": 0,
+    "clean": 8
+  },
+  "innocent_clearance_rate": 0.65,
+  "innocent_above_guilty": 0,
+  "median_origin_error_km": 2.01,
+  "p90_origin_error_km": 8.56,
+  "false_alarm_rate": 0.0,
+  "trials": [
+    {
+      "seed": 920000,
+      "course": 10.7,
+      "wind": 6.2,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 2.11,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "900000004",
+          "distance_km": 3.441,
+          "abstained": false,
+          "correct": false
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920037,
+      "course": 91.6,
+      "wind": 6.5,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 1.15,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "900000007",
+          "distance_km": 9.276,
+          "abstained": false,
+          "correct": false
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920074,
+      "course": 4.0,
+      "wind": 7.9,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 0.85,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 6.581,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920111,
+      "course": 130.0,
+      "wind": 10.5,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 1.94,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 7.678,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920148,
+      "course": 147.8,
+      "wind": 10.3,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 14.49,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 4.778,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920185,
+      "course": 35.1,
+      "wind": 7.0,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 77.7,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 12.76,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 1.778,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 0.8335,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.7768,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.7138,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 0.8728,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.76,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920222,
+      "course": 160.3,
+      "wind": 10.2,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 1.94,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 5.018,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920259,
+      "course": 89.6,
+      "wind": 6.1,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 4.52,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 8.088,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920296,
+      "course": 226.5,
+      "wind": 8.5,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 2.72,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 5.393,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920333,
+      "course": 296.3,
+      "wind": 8.9,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 2.08,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 12.338,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920370,
+      "course": 0.7,
+      "wind": 7.7,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 1.84,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 3.014,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920407,
+      "course": 101.0,
+      "wind": 7.4,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 1.3,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 3.691,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920444,
+      "course": 42.8,
+      "wind": 5.3,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 1.39,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 5.125,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920481,
+      "course": 142.4,
+      "wind": 7.2,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 1.83,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 3.309,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920518,
+      "course": 194.6,
+      "wind": 9.0,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 1.27,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 8.587,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920555,
+      "course": 282.9,
+      "wind": 5.9,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 1.77,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 9.076,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920592,
+      "course": 301.8,
+      "wind": 9.0,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 5.24,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 6.562,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920629,
+      "course": 249.0,
+      "wind": 5.6,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 1.42,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 6.974,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920666,
+      "course": 239.7,
+      "wind": 8.7,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 9.98,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 5.966,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920703,
+      "course": 150.3,
+      "wind": 5.8,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 77.7,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 4.55,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 6.289,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 0.8335,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.7768,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.7138,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 0.8728,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.76,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920740,
+      "course": 5.8,
+      "wind": 7.4,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 2.9,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 4.203,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920777,
+      "course": 44.0,
+      "wind": 8.6,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 2.11,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 2.794,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920814,
+      "course": 275.7,
+      "wind": 6.8,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 1.1,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 1.589,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 920851,
+      "course": 238.8,
+      "wind": 6.9,
+      "detected": true,
+      "rank1": true,
+      "top": "SIMULATED DISCHARGER",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 2.26,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 1.98,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    }
+  ],
+  "wall_seconds": 56.7
+}

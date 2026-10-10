@@ -1,19 +1,7 @@
-"""
-Environmental field provider -- winds and surface currents.
+"""Synthetic winds and surface currents for the pilot region.
 
-In production these come from:
-    winds    ECMWF ERA5 10 m u/v, 0.25 deg hourly (Copernicus CDS)
-    currents Copernicus Marine Service GLOBAL_ANALYSISFORECAST_PHY surface uo/vo
-
-Both are free, both are gridded NetCDF, both are read with xarray, and both are
-consumed here through `wind_at()` / `current_at()`.  For the offline prototype
-this module serves a *cached representative field* for the pilot box built from
-the documented regional circulation: a north-westward West India Coastal Current
-of 0.2-0.4 m/s in September, a semidiurnal tidal ellipse, mesoscale shear, and
-a monsoon-transition wind from the west-north-west.
-
-The point of the interface is that the drift engine never knows which of the
-two it is talking to.  `--fields cmems` swaps the backend, nothing else changes.
+No measured ERA5/CMEMS backend is connected. The interface can support one,
+but current fields are generated from simplified mean flow, tides and eddies.
 """
 
 import math
@@ -30,7 +18,7 @@ M_TIDE = 12.42 * 3600.0  # principal lunar semidiurnal period, seconds
 
 
 class FieldProvider:
-    """Cached representative fields for the pilot box.
+    """Generated representative fields for the pilot box.
 
     Parameters
     ----------
@@ -39,7 +27,7 @@ class FieldProvider:
     wind_dir    meteorological direction the wind blows *from*, degrees
     """
 
-    source = "cached representative field (pilot box)"
+    source = "synthetic representative field (pilot box)"
 
     def __init__(self, seed=0, mean_wind=7.0, wind_dir=290.0):
         rng = np.random.default_rng(seed)

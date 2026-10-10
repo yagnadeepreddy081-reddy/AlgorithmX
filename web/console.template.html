@@ -1,5 +1,4 @@
 <title>Samudra Netra</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
 :root{
   --ground:#EDF1F3; --panel:#FFFFFF; --panel-2:#F5F8F9; --sunk:#E3EAEE;
@@ -338,7 +337,7 @@ footer a{color:var(--ink-2)}
 <header class="mast">
   <div class="brand">
     <div class="rule"></div>
-    <h1>Samudra Netra</h1>
+    <h1>Samudra Netra</h1><p style="font-size:12px">Synthetic research prototype · Scores rank evidence; they are not probabilities of responsibility.</p>
     <p class="tag">From slick to ship &mdash; satellite evidence for maritime accountability</p>
   </div>
   <dl>
@@ -347,7 +346,7 @@ footer a{color:var(--ink-2)}
     <div><dt>Build</dt><dd><span class="chip live" id="m-built">prototype</span></dd></div>
   </dl>
   <div class="mastbtns">
-    <button class="helpbtn ghost" id="helpopen">How do I read this?</button>
+    <button class="helpbtn ghost" id="exportcase">Download case JSON</button><button class="helpbtn ghost" id="helpopen">How do I read this?</button>
     <button class="helpbtn" id="liveopen">Analyse a new image</button>
   </div>
 </header>
@@ -359,7 +358,7 @@ footer a{color:var(--ink-2)}
       <button class="tbtn" id="liveclose" aria-label="Close">Close</button>
     </div>
     <div class="sheetbody sheetbody-lg">
-      <p class="lede">The trained network runs <b>inside this page</b>. Nothing is uploaded anywhere, no server is called, and it works with the Wi-Fi switched off. Give it any image and it will segment it, measure what it finds, and reconstruct where the oil drifted from.</p>
+      <p class="lede">The trained network runs <b>inside this page</b>. Nothing is uploaded anywhere, no server is called, and it works with the Wi-Fi switched off. Use a provided synthetic radar-like tile to segment it, measure detected regions, and illustrate backward drift.</p>
 
       <div class="livegrid">
         <div>
@@ -370,10 +369,10 @@ footer a{color:var(--ink-2)}
             <span>or click to choose a file &mdash; PNG, JPG, anything</span>
           </label>
           <button class="tbtn full" id="usetest">Or load one of 8 fresh sample tiles</button>
-          <p class="tiny" id="sampnote">256 &times; 256 at 80 m ground sampling &mdash; the tile size a full Sentinel-1 scene is cut into. Four of the eight contain a discharge and four do not; the same files are in <span class="mono">sample_tiles/</span> next to this page, so a judge can pick one from disk instead.</p>
+          <p class="tiny" id="sampnote">Synthetic 256 &times; 256 tiles at an assumed 80 m/pixel. Four of the eight contain a discharge and four do not; the same files are in <span class="mono">sample_tiles/</span> next to this page, so a judge can pick one from disk instead.</p>
 
           <div class="eyebrow" style="margin-top:20px">2 &middot; Wind at the time of the pass</div>
-          <p class="tiny">In deployment this is read from the ECMWF ERA5 reanalysis for the scene's own time and position. Here you can set it by hand &mdash; move it below 3 or above 12 m/s and watch the confidence collapse, because outside that band radar cannot see an oil film at all.</p>
+          <p class="tiny">In deployment this is read from the ECMWF ERA5 reanalysis for the scene's own time and position. Here you can set it by hand &mdash; set a value, then run the pipeline again to explore the wind gate. Oil visibility is not guaranteed.</p>
           <div class="windrow">
             <input type="range" id="windslider" min="1" max="16" step="0.5" value="7.5">
             <span class="mono windval"><b id="windval">7.5</b> m/s</span>
@@ -410,7 +409,7 @@ footer a{color:var(--ink-2)}
       <p>Three <b>walkthrough scenes</b> are the ones to present. Below them is a <b>test set of 38 scenes</b> nobody chose &mdash; random weather, random ship courses, and eight scenes with no oil in them at all. Press <b>Random scene</b> and one loads. Every result is kept, including the failures, and the page tells you which is which.</p>
 
       <h4>2 &middot; The middle &mdash; the map</h4>
-      <p>The grey square is the actual radar image, 41 km across. Dark patches are calm or oily water; bright dots are ships. The <b>orange shape</b> is what the model decided is oil. The <b>amber dashed shapes</b> are dark patches the system looked at and <em>rejected</em> as not-oil. The <b>blue line</b> is a ship's AIS track; grey lines are ships that were ruled out.</p>
+      <p>The grey square is a generated radar-like image, with an assumed width of 41 km. Dark patches are calm or oily water; bright dots are ships. The <b>orange shape</b> is what the model decided is oil. The <b>amber dashed shapes</b> are dark patches the system looked at and <em>rejected</em> as not-oil. The <b>blue line</b> is a ship's AIS track; grey lines are ships that were ruled out.</p>
       <p>Buttons top-left switch what you see: <b>SAR</b> is the raw radar image, <b>Segmentation</b> highlights what the model found, <b>Parcels</b> shows the oil droplets being traced backwards, <b>AIS tracks</b> shows the ships.</p>
 
       <h4>3 &middot; The slider under the map &mdash; running time backwards</h4>
@@ -419,9 +418,9 @@ footer a{color:var(--ink-2)}
 
       <h4>4 &middot; The right column &mdash; the measurements and the suspects</h4>
       <p><b>Slick characterisation</b> is the oil measured: how big, how long, how stretched out, which way it points, how much darker than clean sea. <b>Look-alike discriminator</b> shows the five checks that separate real oil from algae, rain and calm patches &mdash; longer bar means more oil-like.</p>
-      <p><b>Candidate vessels</b> is the ranked answer. Click any ship to open its evidence: how many hours it sat inside the release corridor, how close it came, and whether its steering direction matches the direction the oil ribbon points. Ships marked <b>cleared</b> were ruled out by physics, and the reason is printed next to them.</p>
-      <p><b>Evidence weighting</b>, just above that list, is the part to hand over. Those five sliders are the weights in the scoring formula. Move one and every score is recomputed and the list re-sorts in front of you, with the arithmetic printed underneath. Press <b>Behaviour-led</b> and watch first place change hands &mdash; the decoy tanker that went dark takes the top slot, because under that weighting it deserves to. Nothing in this panel is a stored number.</p>
-      <p>Two things survive any weighting you can set. A ship that was never inside the corridor stays <b>cleared</b> at zero, because being somewhere else is a fact, not a low score. And the recovery test below the map follows your weights honestly &mdash; weight it badly and it will tell you the true vessel is no longer first.</p>
+      <p><b>Candidate vessels</b> is the ranked answer. Click any ship to open its evidence: how many hours it sat inside the release corridor, how close it came, and whether its steering direction matches the direction the oil ribbon points. Ships marked <b>excluded by model</b> did not match the usable corridor and had full sampled coverage. Missing coverage is marked <b>insufficient data</b>.</p>
+      <p><b>Evidence weighting</b>, just above that list, is the part to hand over. Those five sliders are the weights in the scoring formula. Move one and every score is recomputed and the list re-sorts in front of you, with the arithmetic printed underneath. Press <b>Behaviour-led</b> to explore how the ranking responds to stronger gap and type weights. An AIS gap can reflect reception issues; it does not establish intent. Nothing in this panel is a stored number.</p>
+      <p>Two things survive any weighting you can set. Ships without a corridor match stay excluded or unknown according to their coverage. The generated corridor itself is uncertain. And the recovery test below the map follows your weights honestly &mdash; weight it badly and it will tell you the true vessel is no longer first.</p>
 
       <h4>5 &middot; Below the map &mdash; proof</h4>
       <p><b>Recovery test</b> compares what really happened in the simulation against what the system worked out, without the system ever being told. <b>Held-out test set</b> is the model's accuracy on 300 images it never saw while training. <b>Uncurated batch</b> is the whole system's score across scenes nobody picked.</p>
@@ -525,7 +524,7 @@ footer a{color:var(--ink-2)}
     </div>
     <div class="panel" id="weightpanel">
       <div class="phead">
-        <h2>Evidence weighting</h2>
+        <h2>Evidence weighting</h2><p class="tiny">Manual weights; factors can be correlated. /100 is a score, not a calibrated probability.</p>
         <button class="linkbtn" id="wreset">reset</button>
       </div>
       <p style="font-size:11.5px;color:var(--ink-3);padding:10px 16px 0;margin:0">
@@ -565,17 +564,18 @@ footer a{color:var(--ink-2)}
   </div>
 </section>
 
+<section class="wide"><div class="card"><h3>Research comparison — same synthetic cases</h3><div class="in" id="comparisonblock"></div></div></section>
 <section class="wide" style="border-top:0;padding-top:0">
   <div class="card">
     <h3>What this system cannot do</h3>
     <div class="in">
       <ul class="lim">
-        <li><b>It is not real-time.</b> Sentinel&#8209;1 revisits a given patch of the Arabian Sea every few days. This is forensic attribution and deterrence, not interception. Today effectively none of India&rsquo;s 2.37&nbsp;million&nbsp;km&sup2; EEZ is checked for illegal discharge; this makes that number greater than zero at near&#8209;zero marginal cost.</li>
-        <li><b>It misses most discharges.</b> Anything released between satellite passes is never seen. The target is the repeat offender, not the individual spill &mdash; a vessel that discharges forty times a year only has to be caught once for a port&#8209;state inspection to follow.</li>
-        <li><b>Oil older than about a day cannot be traced.</b> Drift error compounds the further back you hindcast. Past the point where added uncertainty exceeds <span class="mono">12&nbsp;km</span> the system reports <em>detected, not attributable</em> rather than guessing. Those hours are computed and then explicitly discarded &mdash; you can watch it happen on the timeline.</li>
-        <li><b>It can rank the wrong ship.</b> The output is headed &ldquo;candidate vessels for investigation&rdquo; and every score is broken into its contributing factors, so an officer can see exactly which piece of evidence to attack. It produces a lead, never a verdict. Every incident here carries a deliberate hard case &mdash; <span class="mono">MT SEROJA LIMA</span>, a chemical tanker that crossed the release area during the release window and went dark while it was there. Three of the five factors point at it. What clears it is the fourth: the slick lies along a course it was not steering. Weight the evidence differently in the panel on the right and it takes first place &mdash; which is the point of showing you the weights at all.</li>
-        <li><b>Look-alikes are a permanent hazard.</b> Algal films, wind shadows and rain cells are dark in SAR too. Wind gating, elongation, edge sharpness and damping magnitude cut them down, but they never go to zero.</li>
-        <li><b>This model is trained on synthetic scenes.</b> The Krestenitis labelled Sentinel&#8209;1 benchmark is behind a request form. The physics&#8209;based synthesiser used here reproduces multi&#8209;look speckle, wind&#8209;dependent backscatter and Marangoni damping, and the data loader is interface&#8209;compatible, so the real benchmark trains the same network with a single flag. Until that run happens, treat the IoU figures as a lower bound on a solved problem, not as evidence of field accuracy.</li>
+        <li><b>Synthetic data.</b> The scenes, vessel traffic and environmental fields are simulated. Real-world accuracy has not been measured.</li>
+        <li><b>Retrospective analysis.</b> This demonstration is not a continuous satellite-monitoring or alert service.</li>
+        <li><b>Uncertain attribution.</b> Drift and AIS coverage can be insufficient. Excluded means outside this model's tested corridor, not proven innocent.</li>
+        <li><b>Manual evidence scores.</b> Scores are ranking indices, not probabilities of responsibility. Changing weights can change the leading candidate.</li>
+        <li><b>Look-alikes and missed spills.</b> Dark radar patches may have other causes. Misses and wrong rankings remain in the evaluation.</li>
+        <li><b>Upload assumptions.</b> Image screening is a heuristic; physical measurements assume 80 m/pixel and a known display stretch. Uploads do not identify a vessel.</li>
       </ul>
     </div>
   </div>
@@ -584,7 +584,7 @@ footer a{color:var(--ink-2)}
     <div class="in">
       <div class="eyebrow">Field conditions for this incident</div>
       <div class="tblwrap"><table id="fieldtbl"></table></div>
-      <div class="eyebrow" style="margin-top:16px">Production data feeds</div>
+      <div class="eyebrow" style="margin-top:16px">Potential future data feeds</div>
       <ul class="lim" style="margin-top:8px">
         <li><b>Sentinel&#8209;1 SAR GRD</b>Copernicus Data Space Ecosystem &mdash; free, automated, C&#8209;band, all&#8209;weather, day and night.</li>
         <li><b>AIS vessel tracks</b>Global Fishing Watch v3 API, or a national AIS archive.</li>
@@ -592,7 +592,7 @@ footer a{color:var(--ink-2)}
         <li><b>Surface currents</b>Copernicus Marine Service global analysis &amp; forecast.</li>
       </ul>
       <p style="font-size:11.5px;color:var(--ink-3);margin:12px 0 0">
-        Every feed is free and machine&#8209;readable. No hardware, no procurement, no paid API.
+        These sources are not connected. Access, terms and coverage must be checked before integration.
       </p>
     </div>
   </div>
@@ -793,7 +793,7 @@ function renderIncidents(){
   WALK.forEach(function(inc,i){
     var withC = inc.detections.filter(function(d){return d.candidates&&d.candidates.length;});
     var st, cls;
-    if(withC.length){ st="Vessel identified"; cls="st-hit"; }
+    if(withC.length){ st="Candidates ranked"; cls="st-hit"; }
     else if(inc.detections.length){ st="No attributable slick"; cls="st-clear"; }
     else { st="Clean scene"; cls="st-clear"; }
     h += '<button class="inc" data-i="'+i+'" aria-current="'+(i===state.inc)+'">'
@@ -862,7 +862,7 @@ function renderDetection(){
       +'<div class="bar oil"><i style="width:'+Math.round(f[k]*100)+'%"></i></div></div>';
   });
   $("d-fac").innerHTML=h;
-  $("d-verdict").innerHTML = "<b>"+esc(d.verdict)+"</b> &mdash; combined confidence <span class='mono'>"+fmt(d.confidence*100,0)+"%</span>. "
+  $("d-verdict").innerHTML = "<b>"+esc(d.verdict)+"</b> &mdash; heuristic screening score <span class='mono'>"+fmt(d.confidence*100,0)+"%</span>. "
     + (d.wind_validity<1 ? "Wind of "+fmt(d.wind_ms,1)+" m/s is outside the 4–11 m/s band where SAR oil detection is most reliable, so the score is gated down."
                          : "Wind is inside the band where SAR oil detection is reliable.");
 }
@@ -879,7 +879,7 @@ function renderDetection(){
    Two rules survive any weighting a judge can set, and both are deliberate:
 
    1. A vessel that was never inside the release corridor in any usable
-      hindcast hour stays CLEARED with a score of zero. Clearance is a physical
+      hindcast hour stays EXCLUDED or INSUFFICIENT_DATA with a score of zero. Clearance is a physical
       exclusion, not a low score -- no amount of re-weighting can put a ship
       somewhere it demonstrably was not.
    2. The recovery test below the map follows the live weighting. Weight the
@@ -891,7 +891,7 @@ var FACTOR_LABELS = {
   corridor_hit:   "hours inside the release corridor",
   proximity:      "closeness to the backtracked oil",
   axis_alignment: "course vs the slick's axis",
-  dark_period:    "AIS switched off in the window",
+  dark_period:    "AIS gap overlaps matching hours",
   vessel_type:    "vessel type prior"
 };
 var FACTOR_ORDER = ["corridor_hit","proximity","axis_alignment","dark_period","vessel_type"];
@@ -1021,16 +1021,16 @@ function renderCandidates(){
       + '<div class="cell"><div class="k">Implied discharge</div><div class="v">'+(c.implied_discharge_minutes||"—")+' <small>min</small></div></div>'
       + '</div>';
     if(dark){
-      extra += '<p style="font-size:12px;color:var(--warn);margin:10px 0 0">Transponder dark for '
+      extra += '<p style="font-size:12px;color:var(--warn);margin:10px 0 0">AIS data gap for '
         + c.dark_periods.map(function(x){return x.duration_min+" min";}).join(", ")
-        + ", inside the hindcast window. Treated as evidence, not as missing data.</p>";
+        + ", within the displayed history. Coverage or equipment issues may also explain a gap.</p>";
     }
     return '<button class="cand '+(hot?"hit":"cleared")+(moved?" moved":"")+'" data-mmsi="'+c.mmsi+'" aria-expanded="'+(state.sel===c.mmsi)+'">'
       + '<span class="top"><span class="rk">'+c._rank+'</span><span class="nm">'+esc(c.name)+'</span>'
-      + '<span class="sc">'+fmt(c._score*100,0)+'%</span></span>'
+      + '<span class="sc">'+fmt(c._score*100,0)+'/100</span></span>'
       + '<span class="meta">'+esc(c.type)+' &middot; '+esc(c.flag)+' &middot; '+c.length_m+' m &middot; MMSI '+esc(c.mmsi)+'</span>'
-      + '<span class="meta" style="margin-top:6px"><span class="badge '+(hot?"hit":"cleared")+'">'+(hot?"candidate":"cleared")+'</span>'
-      + (dark?' <span class="badge dark">AIS dark</span>':'') + '</span>'
+      + '<span class="meta" style="margin-top:6px"><span class="badge '+(hot?"hit":"cleared")+'">'+(hot?"candidate":(c.status==="INSUFFICIENT_DATA"?"insufficient data":"excluded by model"))+'</span>'
+      + (dark?' <span class="badge dark">AIS gap</span>':'') + '</span>'
       + '<span class="why">'+esc(c.reason)+'</span>'
       + '<span class="detail">'+fh+extra+'</span></button>';
   }).join("");
@@ -1078,7 +1078,7 @@ function renderValidation(){
   var c = ranked.length ? ranked[0] : null;
   var ok = !!(c && c.truth && c.truth.indexOf("guilty")===0);
   var reweighted = state.preset !== "default";
-  var cleared = (d && d.candidates) ? d.candidates.filter(function(x){return x.status==="CLEARED";}).length : 0;
+  var cleared = (d && d.candidates) ? d.candidates.filter(function(x){return x.status==="EXCLUDED";}).length : 0;
   var total = (d && d.candidates) ? d.candidates.length : 0;
   if(!d){
     box.innerHTML = '<div class="verdict bad"><span class="vm">&#10007;</span><p><b>Missed detection.</b> '
@@ -1094,14 +1094,14 @@ function renderValidation(){
                           : ''))
     + 'The oil was released by a vessel steaming <span class="mono">'+fmt(t.course_deg,0)+'°</span> at <span class="mono">'+fmt(t.speed_kn,1)+'</span> kn, valve open from '
     + '<span class="mono">'+fmt(t.valve_open_h_before,1)+'</span> to <span class="mono">'+fmt(t.valve_close_h_before,1)+'</span> h before the pass. '
-    + 'The detection and attribution chain never sees any of that. ' + cleared + ' of ' + total + ' vessels were cleared on physical grounds.'
+    + 'Simulation truth is attached after analysis for this comparison; the traffic and environmental fields remain synthetic. ' + cleared + ' of ' + total + ' vessels were excluded by the model; incomplete coverage stays unknown.'
     + '</p></div>'
     + '<div class="tblwrap"><table><thead><tr><th>Quantity</th><th>Ground truth</th><th>Recovered</th></tr></thead><tbody>'
     + row("Vessel course / slick axis", fmt(t.course_deg,0)+"&deg;", fmt(d.orientation_deg,0)+"&deg;")
     + row("Release point (lat)", fmt(t.true_release_lat,3), originLat(d))
     + row("Release point (lon)", fmt(t.true_release_lon,3), originLon(d))
     + row("Origin error", "&mdash;", originErr(d,t))
-    + row("Wind-drift factor &alpha;", fmt(t.true_alpha,3), "0.025&ndash;0.036 ensemble")
+    + row("Wind-drift factor &alpha;", fmt(t.true_alpha,3), "0.020&ndash;0.045 ensemble")
     + row("Discharge duration", fmt(t.release_duration_h,1)+" h", (c? fmt(c.expected_run_h,1)+" h":"&mdash;"))
     + row("Ranked first", guiltyName(d), c? esc(c.name):"&mdash;")
     + row("Evidence weighting", "default", reweighted ? "changed by hand" : "default")
@@ -1111,7 +1111,7 @@ function renderValidation(){
 }
 function row(a,b,c){return "<tr><td>"+a+"</td><td>"+b+"</td><td>"+c+"</td></tr>";}
 function originFrame(d){
-  if(!d||!d.drift) return null;
+  if(!d||!d.drift||d.release_hour_estimate==null) return null;
   var h = Math.round(d.release_hour_estimate||0);
   var f = d.drift.frames.filter(function(x){return x.usable;});
   if(!f.length) return null;
@@ -1175,7 +1175,7 @@ function renderRecovery(){
       + '<b>These are the scenes in the left column, and nothing was curated.</b> Sequential seeds; wind, vessel course, speed and discharge duration drawn at random inside operationally plausible ranges; '
       + L.clean+' scenes with no oil in them at all. Every scene is kept, the '+L.missed+' failures included, and each one shows its own outcome when you open it.</p>'
       + '<p style="font-size:11.5px;color:var(--ink-3);margin:9px 0 0">'
-      + 'The failure mode matters more than the score. Across these '+L.scenes+' scenes the system fails by <em>not finding</em> the slick '+L.missed+' times, and never by naming the wrong ship or raising an incident on clean water. '
+      + 'For this synthetic batch of '+L.scenes+' scenes, there were '+L.missed+' misses, '+L.wrong_vessel+' wrong first rankings and '+L.false_alarms+' false alarms on clean scenes. '
       + (r ? 'A separate batch of '+r.incidents+' incidents, run identically, gives '+fmt(r.detection_rate*100,0)+'% detection and a p90 origin error of '+fmt(r.p90_origin_error_km,1)+' km &mdash; and in <b>'
              + (r.innocent_above_guilty||0) + ' case' + ((r.innocent_above_guilty||0)===1?'':'s')
              + '</b> the decoy tanker described below outranked the vessel that actually did it. That number is reported rather than tuned away.' : '')
@@ -1187,7 +1187,7 @@ function renderRecovery(){
     '<div class="grid2">'
     + tile("Discharge detected", fmt(r.detection_rate*100,0), "% of "+r.incidents)
     + tile("True vessel ranked 1st", fmt(r.rank1_accuracy*100,0), "% of detections")
-    + tile("Innocent vessels cleared", fmt(r.innocent_clearance_rate*100,0), "%")
+    + tile("Innocent vessels excluded", fmt(r.innocent_clearance_rate*100,0), "%")
     + tile("False alarms", fmt(r.false_alarm_rate*100,0), "% of "+r.clean_scenes+" clean")
     + tile("Origin error, median", fmt(r.median_origin_error_km,1), "km")
     + tile("Origin error, p90", fmt(r.p90_origin_error_km,1), "km")
@@ -1214,10 +1214,10 @@ function renderField(){
 function renderStages(){
   var d=curDet(), inc=curInc();
   var st = [
-    ["01","Scene ingest","Sentinel-1 GRD tile, calibrated, speckle-filtered, land-masked, multilooked to "+inc.pixel_metres+" m."],
+    ["01","Scene ingest","Synthetic radar-like tile at assumed "+inc.pixel_metres+" m."],
     ["02","Segmentation","U-Net over the tile; five classes, per-pixel softmax."],
     ["03","Characterisation",(inc.n_detections||0)+" slick"+(inc.n_detections===1?"":"s")+" measured, "+((inc.lookalikes||[]).length)+" look-alike"+((inc.lookalikes||[]).length===1?"":"s")+" rejected; shape, damping and wind gate applied."],
-    ["04","Reverse drift", d&&d.drift ? d.drift.particles+" parcels, "+d.drift.ensemble_members+"-member ensemble, "+d.drift.hours_computed+" h computed, "+d.drift.hours_usable+" h evidential." : "Not run — no detection above threshold."],
+    ["04","Reverse drift", d&&d.drift ? d.drift.particles+" parcels, "+d.drift.ensemble_members+"-member ensemble, "+d.drift.hours_computed+" h computed, "+d.drift.hours_usable+" h within the configured uncertainty gate." : "Not run — no detection above threshold."],
     ["05","AIS correlation", d&&d.candidates&&d.candidates.length ? d.candidates.length+" vessels tested against the corridor hour by hour." : "Not run."],
     ["06","Evidence scoring", d&&d.candidates&&d.candidates.length ? "Five weighted factors, contributions reported separately." : "Not run."]
   ];
@@ -1226,6 +1226,14 @@ function renderStages(){
   }).join("");
 }
 
+function renderComparisons(){
+  var comp=(DATA.recovery||{}).comparisons||{};
+  var labels={visible_slick_nearest:"Nearest to visible slick",drift_geometry:"Backward drift geometry",full:"Full evidence score",no_axis:"Without course alignment",no_ais_gap:"Without AIS-gap factor",no_type_prior:"Without type prior"};
+  var keys=Object.keys(comp);
+  $("comparisonblock").innerHTML=keys.length ? '<p class="tiny">All-incident success includes misses and abstentions. Intervals describe finite simulated trials, not field accuracy.</p><table><tr><th>Method</th><th>Correct / total</th><th>95% interval</th></tr>'+keys.map(function(k){var c=comp[k],ci=c.rank1_over_all_95pct_wilson;return '<tr><td>'+esc(labels[k]||k)+'</td><td>'+c.correct+' / '+c.total_incidents+'</td><td>'+(ci?fmt(ci[0]*100,0)+'–'+fmt(ci[1]*100,0)+'%':'—')+'</td></tr>';}).join('')+'</table>' : 'Comparison experiment not available in this build.';
+  var stress=DATA.stress;
+  if(stress){var sc=stress.comparisons;$("comparisonblock").innerHTML += '<h4>Random background traffic: '+stress.incidents+' additional discharge scenes</h4><p class="tiny">Ten background vessels per scene; fixed settings. Clean controls repeat the original eight scenes.</p><table><tr><th>Method</th><th>Correct / total</th></tr>'+Object.keys(sc).map(function(k){return '<tr><td>'+esc(labels[k]||k)+'</td><td>'+sc[k].correct+' / '+sc[k].total_incidents+'</td></tr>';}).join('')+'</table>';}
+}
 function renderAll(){
   var inc=curInc();
   $("m-region").textContent = (DATA.pilot_box&&DATA.pilot_box.name)||"—";
@@ -1237,9 +1245,14 @@ function renderAll(){
   $("lay-seg").textContent = inc.overlay_png ? "Segmentation" : "Highlight oil";
   renderIncidents(); renderBanner(); renderDetection();
   renderWeights(); renderCandidates(); renderTimeline();
-  renderValidation(); renderMetrics(); renderRecovery(); renderField(); renderStages(); drawMap();
+  renderComparisons(); renderValidation(); renderMetrics(); renderRecovery(); renderField(); renderStages(); drawMap();
 }
 
+function downloadJSON(value,name){
+  var url=URL.createObjectURL(new Blob([JSON.stringify(value,null,2)],{type:"application/json"}));
+  var a=document.createElement("a");a.href=url;a.download=name;a.click();setTimeout(function(){URL.revokeObjectURL(url);},1000);
+}
+$("exportcase").addEventListener("click",function(){var inc=JSON.parse(JSON.stringify(curInc()));inc.display_weights=JSON.parse(JSON.stringify(activeWeights()));inc.display_ranking=rankedCandidates().map(function(c){return {mmsi:c.mmsi,index:c._score,status:c.status};});inc.export_note="Synthetic case. Truth fields are evaluation-only; scores are heuristic indices.";downloadJSON(inc,inc.incident_id+".json");});
 /* =========================== interaction =========================== */
 $("slider").addEventListener("input",function(){ state.hour=+this.value; renderTimeline(); drawMap(); });
 function setLayer(l){ state.layer=l; ["sar","seg","truth"].forEach(function(k){ $("lay-"+k).setAttribute("aria-pressed", String(k===l)); }); drawMap(); }
@@ -1402,10 +1415,10 @@ window.addEventListener("resize",function(){ if(view) applyView(); });
       var top = res.detections[0];
       // No drift on an input that failed the radar check: reconstructing a
       // release point for a photograph would be theatre.
-      if(prep.plausible && top && top.confidence >= 0.35 && top.area_km2 >= 1.0){
+      if(prep.plausible && top && top.confidence >= 0.35 && top.area_km2 >= 1.5){
         setProg(0.92,"running the ocean backwards");
         await SN.tick();
-        driftRes = SNA.backwardDrift(top, SIZE, wind, 290, 24, 4242);
+        driftRes = SNA.backwardDrift(top, SIZE, wind, 290, 30, 4242);
       }
       setProg(1,"done");
       renderLive(res, wind);
@@ -1430,7 +1443,7 @@ window.addEventListener("resize",function(){ if(view) applyView(); });
     var top = res.detections[0];
     var counts = res.class_counts, tot = counts.reduce(function(a,b){return a+b;},0);
     var names = ["sea","oil","look-alike","ship","land"];
-    var h = '<div class="eyebrow">3 &middot; Result</div>'
+    var h = '<p class="tiny">Illustrative analysis: 80 m/pixel and a fixed display stretch are assumed. An uploaded image is not automatically georeferenced or calibrated; drift uses generated environmental fields.</p><div class="eyebrow">3 &middot; Result</div>'
       + '<div class="pair">'
       + '<figure><img src="'+res.images.sar+'" alt="input tile"><figcaption>What the network was given</figcaption></figure>'
       + '<figure><img src="'+res.images.overlay+'" alt="segmentation"><figcaption>What it decided, pixel by pixel</figcaption></figure>'
@@ -1441,13 +1454,13 @@ window.addEventListener("resize",function(){ if(view) applyView(); });
       // a holiday photograph is not a detector, and a judge who tries exactly
       // that -- and they will -- should see it refuse.
       h += '<div class="verdictbox grey" style="border-left-color:var(--warn)">'
-        + '<h5>Input rejected &mdash; this is not Sentinel-1 radar data</h5>'
+        + '<h5>Input outside the demo’s expected radar-like appearance</h5>'
         + '<p>' + esc(prep.notes.join(" ")) + '</p>'
-        + '<p style="margin-top:8px"><b>No detection is reported and no drift was run.</b> '
+        + '<p style="margin-top:8px"><b>No reliable detection is reported and no drift was run.</b> '
         + 'The pixel classes below are shown only so you can see the network did execute; '
         + 'they are not a finding, and the system will not treat them as one.</p></div>'
         + '<p class="tiny">Measured: speckle ' + prep.stats.speckle.toFixed(3)
-        + ' (Sentinel-1 GRD runs about 0.05&ndash;0.10), contrast ' + prep.stats.sd.toFixed(3)
+        + ' (demo display scale), contrast ' + prep.stats.sd.toFixed(3)
         + ', colour saturation ' + prep.stats.saturation.toFixed(2) + ' (radar has none).</p>';
     } else {
       h += '<p class="tiny" style="margin-top:10px">' + esc(prep.notes.join(" ")) + '</p>';
@@ -1470,7 +1483,7 @@ window.addEventListener("resize",function(){ if(view) applyView(); });
     } else {
       var cls = top.confidence>=0.35 ? "" : " grey";
       h += '<div class="verdictbox'+cls+'"><h5>'+esc(top.verdict)+' &mdash; '
-        + Math.round(top.confidence*100)+'% confidence</h5><p>'
+        + Math.round(top.confidence*100)+'/100 heuristic screening score</h5><p>'
         + 'Largest region: <b>'+top.area_km2.toFixed(2)+' km&sup2;</b>, '
         + top.length_km.toFixed(1)+' km long, elongation <b>'+top.elongation.toFixed(1)+':1</b>, '
         + 'principal axis '+Math.round(top.orientation_deg)+'&deg;, '
@@ -1498,9 +1511,9 @@ window.addEventListener("resize",function(){ if(view) applyView(); });
     }
 
     h += '<div class="stagenote"><b>What this did not do:</b> it did not name a ship. '
-      + 'Attribution needs the AIS vessel-traffic archive for this scene\'s own date and position, and we hold that only for the pilot box. '
+      + 'Attribution needs the AIS vessel-traffic archive for this scene\'s own date and position, and we hold that only for simulated examples. '
       + 'Inventing a vessel here would be the one dishonest thing this project could do. '
-      + 'What you have just watched is stages 1 to 4 &mdash; detection, measurement, look-alike rejection and reverse drift &mdash; running live on an image the system had never seen. '
+      + 'What you have just watched is demo stages &mdash; segmentation, measurement, look-alike screening and illustrative reverse drift &mdash; running live on an image the system had never seen. '
       + 'For the full chain through to a ranked suspect, use the 38-scene test set behind this window, where the AIS tracks and the ground truth both exist.</div>';
 
     $("liveresult").innerHTML = h;

@@ -244,7 +244,7 @@ def _paint_rain_cell(rng, shape, cy, cx):
 # scene generation
 # ----------------------------------------------------------------------------
 
-def generate_scene(seed, size=256, force_oil=None, oil_cov=None):
+def generate_scene(seed, size=256, force_oil=None, oil_cov=None, mean_wind=None):
     """
     Returns
     -------
@@ -256,7 +256,9 @@ def generate_scene(seed, size=256, force_oil=None, oil_cov=None):
     rng = np.random.default_rng(seed)
     shape = (size, size)
 
-    mean_wind = rng.uniform(2.2, 13.5)
+    mean_wind = float(rng.uniform(2.2, 13.5) if mean_wind is None else mean_wind)
+    if not np.isfinite(mean_wind) or mean_wind <= 0:
+        raise ValueError("mean_wind must be finite and positive")
     wind = _wind_field(rng, shape, mean_wind)
     nrcs_db = ocean_nrcs_db(wind)
 

@@ -1,0 +1,689 @@
+{
+  "protocol": "observation_boundary_v2",
+  "data_source": "synthetic",
+  "traffic_mode": "constructed",
+  "seed_base": 770000,
+  "parameter_seed": 20260902,
+  "comparisons": {
+    "visible_slick_nearest": {
+      "correct": 12,
+      "total_incidents": 12,
+      "ranked": 12,
+      "abstained_or_missed": 0,
+      "rank1_over_all": 1.0,
+      "rank1_when_ranked": 1.0,
+      "rank1_over_all_95pct_wilson": [
+        0.7575,
+        1
+      ]
+    },
+    "drift_geometry": {
+      "correct": 12,
+      "total_incidents": 12,
+      "ranked": 12,
+      "abstained_or_missed": 0,
+      "rank1_over_all": 1.0,
+      "rank1_when_ranked": 1.0,
+      "rank1_over_all_95pct_wilson": [
+        0.7575,
+        1
+      ]
+    },
+    "full": {
+      "correct": 12,
+      "total_incidents": 12,
+      "ranked": 12,
+      "abstained_or_missed": 0,
+      "rank1_over_all": 1.0,
+      "rank1_when_ranked": 1.0,
+      "rank1_over_all_95pct_wilson": [
+        0.7575,
+        1
+      ]
+    },
+    "no_axis": {
+      "correct": 12,
+      "total_incidents": 12,
+      "ranked": 12,
+      "abstained_or_missed": 0,
+      "rank1_over_all": 1.0,
+      "rank1_when_ranked": 1.0,
+      "rank1_over_all_95pct_wilson": [
+        0.7575,
+        1
+      ]
+    },
+    "no_ais_gap": {
+      "correct": 12,
+      "total_incidents": 12,
+      "ranked": 12,
+      "abstained_or_missed": 0,
+      "rank1_over_all": 1.0,
+      "rank1_when_ranked": 1.0,
+      "rank1_over_all_95pct_wilson": [
+        0.7575,
+        1
+      ]
+    },
+    "no_type_prior": {
+      "correct": 12,
+      "total_incidents": 12,
+      "ranked": 12,
+      "abstained_or_missed": 0,
+      "rank1_over_all": 1.0,
+      "rank1_when_ranked": 1.0,
+      "rank1_over_all_95pct_wilson": [
+        0.7575,
+        1
+      ]
+    }
+  },
+  "incidents": 12,
+  "clean_scenes": 8,
+  "detection_rate": 1.0,
+  "rank1_accuracy": 1.0,
+  "rank1_over_all": 1.0,
+  "counts": {
+    "discharges": 12,
+    "detected": 12,
+    "rank1": 12,
+    "false_alarms": 0,
+    "clean": 8
+  },
+  "innocent_clearance_rate": 0.033,
+  "innocent_above_guilty": 0,
+  "median_origin_error_km": 2.4,
+  "p90_origin_error_km": 5.74,
+  "false_alarm_rate": 0.0,
+  "trials": [
+    {
+      "seed": 770000,
+      "course": 65.5,
+      "wind": 10.2,
+      "detected": true,
+      "rank1": true,
+      "top": "MT ARJUN PRIDE",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 5.26,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 10.093,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 770037,
+      "course": 322.6,
+      "wind": 5.8,
+      "detected": true,
+      "rank1": true,
+      "top": "MT ARJUN PRIDE",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 0.09,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 2.576,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 770074,
+      "course": 272.1,
+      "wind": 5.1,
+      "detected": true,
+      "rank1": true,
+      "top": "MT ARJUN PRIDE",
+      "score": 87.9,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 1.17,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 5.738,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 0.9845,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.8795,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.8455,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 0.9882,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8704,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 770111,
+      "course": 91.5,
+      "wind": 10.5,
+      "detected": true,
+      "rank1": true,
+      "top": "MT ARJUN PRIDE",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 3.32,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 6.232,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 770148,
+      "course": 178.4,
+      "wind": 6.8,
+      "detected": true,
+      "rank1": true,
+      "top": "MT ARJUN PRIDE",
+      "score": 77.9,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 6.26,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 5.969,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.7787,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 0.8749,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.762,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 770185,
+      "course": 218.2,
+      "wind": 7.1,
+      "detected": true,
+      "rank1": true,
+      "top": "MT ARJUN PRIDE",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 1.62,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 1.849,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 770222,
+      "course": 73.3,
+      "wind": 8.6,
+      "detected": true,
+      "rank1": true,
+      "top": "MT ARJUN PRIDE",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 2.56,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 8.045,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 770259,
+      "course": 96.8,
+      "wind": 7.4,
+      "detected": true,
+      "rank1": true,
+      "top": "MT ARJUN PRIDE",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 3.01,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 6.372,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 770296,
+      "course": 57.2,
+      "wind": 9.6,
+      "detected": true,
+      "rank1": true,
+      "top": "MT ARJUN PRIDE",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 1.73,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 6.674,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 770333,
+      "course": 192.8,
+      "wind": 9.6,
+      "detected": true,
+      "rank1": true,
+      "top": "MT ARJUN PRIDE",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 1.71,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 5.711,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 770370,
+      "course": 271.1,
+      "wind": 6.6,
+      "detected": true,
+      "rank1": true,
+      "top": "MT ARJUN PRIDE",
+      "score": 77.7,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 5.8,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 3.663,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 0.8335,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.7768,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.7138,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 0.8728,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.76,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    },
+    {
+      "seed": 770407,
+      "course": 260.6,
+      "wind": 7.7,
+      "detected": true,
+      "rank1": true,
+      "top": "MT ARJUN PRIDE",
+      "score": 89.0,
+      "innocent_above_guilty": 0,
+      "origin_error_km": 2.23,
+      "methods": {
+        "visible_slick_nearest": {
+          "mmsi": "419087341",
+          "distance_km": 12.159,
+          "abstained": false,
+          "correct": true
+        },
+        "drift_geometry": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "full": {
+          "mmsi": "419087341",
+          "score": 0.89,
+          "abstained": false,
+          "correct": true
+        },
+        "no_axis": {
+          "mmsi": "419087341",
+          "score": 0.859,
+          "abstained": false,
+          "correct": true
+        },
+        "no_ais_gap": {
+          "mmsi": "419087341",
+          "score": 1.0,
+          "abstained": false,
+          "correct": true
+        },
+        "no_type_prior": {
+          "mmsi": "419087341",
+          "score": 0.8817,
+          "abstained": false,
+          "correct": true
+        }
+      }
+    }
+  ],
+  "wall_seconds": 30.6
+}

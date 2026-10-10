@@ -41,11 +41,12 @@ SPECS = [
     (515941, "Busy shipping lane, no oil", None),
 ]
 
-OUT_DIR = "deploy/sample_tiles"
+OUT_DIR = "public/sample_tiles"
 
 
 def main():
     os.makedirs(OUT_DIR, exist_ok=True)
+    os.makedirs("out", exist_ok=True)
     lat0, lon0 = fields.PILOT["lat0"], fields.PILOT["lon0"]
     incident_sim.set_origin(lat0, lon0)
     entries = []
@@ -62,7 +63,7 @@ def main():
                 speed_kn=rel["speed_kn"], course_deg=rel["course_deg"],
             )
         img, mask, meta = sar_sim.generate_scene(
-            seed, size=256, force_oil=bool(rel), oil_cov=oil_cov)
+            seed, size=256, force_oil=bool(rel), oil_cov=oil_cov, mean_wind=wind)
 
         g = (np.clip(img, 0, 1) * 255).astype(np.uint8)
         im = Image.fromarray(g, mode="L")

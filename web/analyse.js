@@ -244,7 +244,7 @@ var SNA = (function () {
 
   /* ---------- backward drift ensemble ---------------------------------- */
   function backwardDrift(m, S, wind, windDir, hoursBack, seed) {
-    var N = 600, M = 12, DT = 900, KH = 25.0;
+    var N = 900, M = 12, DT = 900, KH = 25.0;
     var s = (seed || 12345) >>> 0;
     function rnd() { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }
     var field = new Field(seed || 7, wind, windDir);
@@ -259,7 +259,7 @@ var SNA = (function () {
                  w: Math.max(0.25, 1 + gauss(rnd) * 0.22),
                  r: gauss(rnd) * 20 * Math.PI / 180 });
     for (var i = 0; i < N; i++) {
-      var p = m.members[(Math.random() * m.members.length) | 0];
+      var p = m.members[(rnd() * m.members.length) | 0];
       var py = ((p / S) | 0) + rnd() - 0.5, px = (p % S) + rnd() - 0.5;
       x[i] = (px - S / 2) * PIXEL_M; y[i] = (S / 2 - py) * PIXEL_M;
       var mm = mem[i % M];
@@ -271,13 +271,16 @@ var SNA = (function () {
       if (h > 0) {
         for (var st = 0; st < 4; st++) {
           for (i = 0; i < N; i++) {
-            var c = field.current(x[i], y[i], t), w = field.wind(t);
-            var ca = Math.cos(defl[i]), sa = Math.sin(defl[i]);
-            var dwu = alpha[i] * wg[i] * (w[0] * ca + w[1] * sa);
-            var dwv = alpha[i] * wg[i] * (-w[0] * sa + w[1] * ca);
-            var cr = Math.cos(crot[i]), sr = Math.sin(crot[i]);
-            var cu = cg[i] * (c[0] * cr - c[1] * sr), cv = cg[i] * (c[0] * sr + c[1] * cr);
-            x[i] -= (cu + dwu) * DT; y[i] -= (cv + dwv) * DT;
+            function velocity(px, py, at) {
+              var c = field.current(px, py, at), w = field.wind(at);
+              var ca = Math.cos(defl[i]), sa = Math.sin(defl[i]);
+              var cr = Math.cos(crot[i]), sr = Math.sin(crot[i]);
+              return [cg[i]*(c[0]*cr-c[1]*sr) + alpha[i]*wg[i]*(w[0]*ca+w[1]*sa),
+                      cg[i]*(c[0]*sr+c[1]*cr) + alpha[i]*wg[i]*(-w[0]*sa+w[1]*ca)];
+            }
+            var vel = velocity(x[i], y[i], t);
+            var mid = velocity(x[i]-vel[0]*DT/2, y[i]-vel[1]*DT/2, t-DT/2);
+            x[i] -= mid[0]*DT; y[i] -= mid[1]*DT;
             x[i] += gauss(rnd) * sig; y[i] += gauss(rnd) * sig;
           }
           t -= DT;

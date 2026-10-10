@@ -37,6 +37,11 @@ def main():
         rec.pop("trials", None)
         payload["recovery"] = rec
 
+    if os.path.exists("out/stress.json"):
+        stress = json.load(open("out/stress.json"))
+        stress.pop("trials", None)
+        payload["stress"] = stress
+
     blob = json.dumps(payload, separators=(",", ":"))
     blob = blob.replace("</script>", "<\\/script>")
     html = html.replace("__DATA__", blob)
@@ -49,6 +54,7 @@ def main():
     for token, path in [("__ENGINE__", "web/engine.js"), ("__ANALYSE__", "web/analyse.js")]:
         with open(path) as f:
             html = html.replace(token, f.read())
+    html = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Samudra Netra research prototype</title></head><body>' + html + '</body></html>'
     os.makedirs("web", exist_ok=True)
     with open(OUT, "w") as f:
         f.write(html)

@@ -105,7 +105,7 @@ def main():
             if step < steps - 1:
                 sched.step()
             step += 1
-            run += float(loss)
+            run += float(loss.detach())
             nb += 1
 
         cm = evaluate(model, va_i, va_m, device, args.batch)
@@ -146,7 +146,8 @@ def main():
         "trained_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "wall_seconds": round(time.time() - t0, 1),
     }
-    with open(os.path.join(args.out, "metrics.json"), "w") as f:
+    os.makedirs("results", exist_ok=True)
+    with open("results/metrics.json", "w") as f:
         json.dump(report, f, indent=2)
 
     print("\n=== HELD-OUT TEST SET (%d scenes, never seen) ===" % len(te_i))

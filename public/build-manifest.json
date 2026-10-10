@@ -1,0 +1,20 @@
+{
+  "protocol": "observation_boundary_v2",
+  "python": "3.13.15",
+  "packages": {
+    "torch": "2.14.1",
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "scikit-image": "0.26.0",
+    "pillow": "12.3.0"
+  },
+  "files": {
+    "models/unet_slick.pt": "7acf8bb6686c06b2eec07d2853e8f35ab88c340b652bf2ddf55d5c146bc35980",
+    "public/index.html": "9cc21fde980d770f69efeb6d0e38939d62f26158a30c92216002a1012b662853",
+    "results/metrics.json": "07d13f36250591f1200fb72081af333f84f6420d3f83e41692b340e52225dde3",
+    "results/research-comparison.json": "6e1f0cbd1683b3b13826714553e5d3c6f230d962394d40d6026fd010b1724ef2",
+    "results/stress-comparison.json": "1070b3524f3a8eb1564da8833c3ada87943de21280190a3466cd797fa15bdbd0",
+    "docs/RESEARCH_PROTOCOL.md": "4cf3c7b44a54cfe936b948373ec3a60176a4660c83e8b98b48f09d3b97c001cc",
+    "requirements-lock.txt": "b56670faa50bfa5613038978f1e1931afc7e4999b267e0de24fcb8383c9f257c"
+  }
+}

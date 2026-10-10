@@ -1,7 +1,7 @@
 """
 Stage 6 -- spatio-temporal filtering and explainable evidence scoring.
 
-Every candidate is scored on five independent factors.  They are kept separate
+Every candidate is scored on five separately reported factors.  They are kept separate
 and reported separately on purpose: an officer has to be able to say *why* a
 vessel is ranked first, and a judge has to be able to attack any single factor
 without the whole thing collapsing into an unexplainable number.
@@ -76,7 +76,12 @@ def _mean_course(samples):
     return (math.degrees(math.atan2(s, c)) / 2.0) % 180.0
 
 
-def score_vessels(det, drift_result, ais_scenario, lat0, lon0):
+def score_vessels(det, drift_result, ais_scenario, lat0, lon0, weights=None):
+    weights = dict(WEIGHTS if weights is None else weights)
+    if set(weights) != set(WEIGHTS) or any(not np.isfinite(v) or v < 0 for v in weights.values()) or sum(weights.values()) <= 0:
+        raise ValueError("Provide five finite nonnegative weights with a positive sum")
+    total = sum(weights.values())
+    weights = {k: v / total for k, v in weights.items()}
     frames = [f for f in drift_result["frames"] if f["usable"] and f["hours_back"] > 0]
     usable_hours = [f["hours_back"] for f in frames]
     n_usable = len(usable_hours)
@@ -125,10 +130,10 @@ def score_vessels(det, drift_result, ais_scenario, lat0, lon0):
             results.append(
                 {
                     "mmsi": v["mmsi"], "name": v["name"], "type": v["type"], "flag": v["flag"],
-                    "length_m": v["length_m"], "score": 0.0, "status": "CLEARED",
+                    "length_m": v["length_m"], "score": 0.0, "status": "INSUFFICIENT_DATA",
                     "reason": "No AIS coverage within the usable hindcast window.",
                     "factors": {}, "hours_in_corridor": 0, "usable_hours": n_usable,
-                    "closest_km": None, "dark_periods": dark, "track": [], "truth": v.get("truth"),
+                    "closest_km": None, "dark_periods": dark, "track": [],
                 }
             )
             continue
@@ -168,16 +173,14 @@ def score_vessels(det, drift_result, ais_scenario, lat0, lon0):
             # full credit within 15 deg, zero beyond 55 deg
             alignment = float(np.clip((55.0 - align_deg) / 40.0, 0.0, 1.0))
 
-        # Transponder silence is scored against the DISCHARGE window, not the
-        # whole hindcast.  A vessel dark for the two hours the oil was going
-        # into the water is the case this factor exists to catch; dividing that
-        # by an eighteen-hour hindcast dilutes it to nothing and the factor
-        # stops meaning anything.
-        window = set(usable_hours)
+        # Score missing hours bracketed by supported corridor matches. Never
+        # infer vessel positions inside a long gap or treat silence as intent.
+        # One isolated match cannot establish a supported gap window.
+        window = set(range(int(min(hit_hours)), int(max(hit_hours)) + 1)) if hit_hours else set()
         dark_score = 0.0
         for d in dark:
             lo, hi = d["to_h_before"], d["from_h_before"]
-            covered = sum(1 for h in window if lo <= h <= hi)
+            covered = sum(1 for h in window if lo < h < hi)
             dark_score = max(dark_score, float(np.clip(covered / max(expected_h, 1.5), 0.0, 1.0)))
 
         type_score = TYPE_PRIOR.get(v["type"], 0.5)
@@ -189,20 +192,21 @@ def score_vessels(det, drift_result, ais_scenario, lat0, lon0):
             "dark_period": round(dark_score, 3),
             "vessel_type": round(type_score, 3),
         }
-        raw = sum(WEIGHTS[k] * factors[k] for k in WEIGHTS)
+        raw = sum(weights[k] * factors[k] for k in weights)
 
         # A vessel that was never inside the envelope in any usable hour is
         # physically excluded.  No amount of vessel-type prior or course
         # coincidence should be able to promote it.
         if len(inside) == 0:
-            status = "CLEARED"
+            status = "INSUFFICIENT_DATA" if len(abs_dists) < n_usable else "EXCLUDED"
             score = 0.0
-            if closest > 15:
+            if status == "INSUFFICIENT_DATA":
+                reason = "No match in available samples; incomplete AIS coverage prevents exclusion."
+            elif closest > 15:
                 reason = "Never within the release envelope; closest approach %.1f km." % closest
             else:
                 reason = (
-                    "Approached to %.1f km but only outside the release window - "
-                    "the vessel was not in the origin area at the hours the oil was released."
+                    "No match to the generated corridor at sampled usable hours; closest approach %.1f km."
                     % closest
                 )
         else:
@@ -223,8 +227,8 @@ def score_vessels(det, drift_result, ais_scenario, lat0, lon0):
                 "status": status,
                 "reason": reason,
                 "factors": factors,
-                "weights": WEIGHTS,
-                "contributions": {k: round(WEIGHTS[k] * factors[k], 4) for k in WEIGHTS},
+                "weights": weights,
+                "contributions": {k: round(weights[k] * factors[k], 4) for k in weights},
                 "hours_in_corridor": len(inside),
                 "longest_run_h": longest,
                 "expected_run_h": round(expected_h, 1),
@@ -235,6 +239,8 @@ def score_vessels(det, drift_result, ais_scenario, lat0, lon0):
                 "slick_axis_deg": round(slick_axis, 1),
                 "axis_difference_deg": None if align_deg is None else round(align_deg, 1),
                 "dark_periods": dark,
+                "coverage_fraction": round(len(abs_dists) / max(n_usable, 1), 3),
+                "release_hour_estimate": (round(float(np.mean(hit_hours)), 2) if hit_hours else None),
                 "corridor_hits": inside,
                 "track": [
                     {"t_h": s["t_h"], "lat": s["lat"], "lon": s["lon"], "observed": s["observed"]}
@@ -243,7 +249,7 @@ def score_vessels(det, drift_result, ais_scenario, lat0, lon0):
                 # Track clipped to a window around the tile: a vessel's 14-hour
                 # history runs for 250+ km and would make the map unreadable.
                 "full_track": _clip_track(pings, lat0, lon0, 34.0),
-                "truth": v.get("truth"),
+                "score_kind": "heuristic_evidence_index",
             }
         )
 

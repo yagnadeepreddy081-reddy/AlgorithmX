@@ -32,6 +32,7 @@ import incident_sim
 import sar_sim
 import score as score_mod
 from unet import UNet
+from experiments import compare_methods
 
 CLASS_COLOURS = {
     1: (255, 62, 62),     # oil
@@ -42,7 +43,8 @@ CLASS_COLOURS = {
 
 
 def load_model(path="models/unet_slick.pt"):
-    ck = torch.load(path, map_location="cpu")
+    ck = torch.load(path, map_location="cpu", weights_only=True)
+    torch.set_num_threads(2)
     m = UNet(1, 5, base=ck.get("base", 20))
     m.load_state_dict(ck["state_dict"])
     m.eval()
@@ -114,39 +116,18 @@ def _strip(obj):
     return obj
 
 
-def build_incident(model, seed, incident_id, acquired_utc, want_oil=True, size=512,
-                   release=None, compact=False):
-    """
-    release : dict or None
-        When present, a real discharge is simulated FORWARD (vessel track ->
-        parcel release -> advection to acquisition) and the drifted parcel
-        cloud is what gets rendered into the SAR scene.  The detection and
-        attribution stages then have to recover the vessel from the image
-        alone.
-    """
-    lat0, lon0 = fields.PILOT["lat0"], fields.PILOT["lon0"]
-    incident_sim.set_origin(lat0, lon0)
-
-    scene_wind = release.get("wind_ms", 7.4) if release else 7.4
-    prov = fields.FieldProvider(seed=seed, mean_wind=scene_wind, wind_dir=290.0)
-
-    release_truth = None
-    oil_cov = None
-    if release is not None:
-        oil_cov, release_truth = incident_sim.simulate_release(
-            prov, size, seed=seed,
-            release_start_h=release["start_h"], release_end_h=release["end_h"],
-            speed_kn=release["speed_kn"], course_deg=release.get("course_deg"),
-        )
-
-    img, truth, meta = sar_sim.generate_scene(seed, size=size, force_oil=want_oil,
-                                              oil_cov=oil_cov)
-    if release is not None:
-        meta["wind_ms"] = scene_wind
+def analyse_observation(model, img, traffic, provider, incident_id, acquired_utc,
+                        lat0, lon0, compact=False):
+    """Analysis boundary: no masks, release times, truth labels or simulator inputs."""
+    if any("truth" in v for v in traffic["vessels"]) or "release_hour_estimate" in traffic:
+        raise ValueError("Ground truth is not an analysis input")
+    size = img.shape[0]
+    if img.shape != (size, size) or size % 8 or not np.isfinite(img).all():
+        raise ValueError("Image must be a finite square array with size divisible by 8")
     class_map, probs = segment(model, img)
-
-    dets = ch.characterise(img, class_map, probs, meta["wind_ms"], lat0, lon0, acquired_utc)
-
+    dets = ch.characterise(img, class_map, probs, provider.mean_wind,
+                           lat0, lon0, acquired_utc)
+    prov = provider
     half_km = size * sar_sim.PIXEL_METRES / 2000.0
     import geo as geo_mod
     sw = geo_mod.xy_to_lonlat(-half_km * 1000, -half_km * 1000, lat0, lon0)
@@ -160,21 +141,16 @@ def build_incident(model, seed, incident_id, acquired_utc, want_oil=True, size=5
         "bounds": [[round(sw[1], 6), round(sw[0], 6)], [round(ne[1], 6), round(ne[0], 6)]],
         "pixel_metres": sar_sim.PIXEL_METRES,
         "tile_km": round(size * sar_sim.PIXEL_METRES / 1000.0, 1),
-        "wind_ms": round(float(meta["wind_ms"]), 1),
+        "wind_ms": round(float(provider.mean_wind), 1),
         # Library scenes carry the raw SAR tile only.  The segmentation is sent
         # as polygons instead of a second raster: a speckled overlay image costs
         # 169 kB even palette-quantised, and 38 of those will not fit in a page.
         "sar_png": _jpg_b64(quicklook(img), quality=56) if compact else _png_b64(quicklook(img)),
         "overlay_png": None if compact else _png_b64(overlay(img, class_map)),
-        "truth_png": None if compact else _png_b64(overlay(img, truth)),
+        "truth_png": None,
         "n_detections": len(dets),
         "lookalikes": ch.characterise_lookalikes(class_map, lat0, lon0, size),
         "detections": [],
-        "scene_truth": {
-            "has_oil": meta["has_oil"],
-            "n_lookalikes": meta["n_lookalikes"],
-        },
-        "release_truth": release_truth,
         "field": prov.describe(),
     }
 
@@ -185,7 +161,7 @@ def build_incident(model, seed, incident_id, acquired_utc, want_oil=True, size=5
     for d in dets:
         entry = {k: v for k, v in d.items() if not k.startswith("_")}
         max_attr = 1 if compact else 2
-        if (release_truth is None or d["confidence"] < 0.35
+        if (d["confidence"] < 0.35
                 or d["area_km2"] < 1.5 or n_attributed >= max_attr):
             entry["drift"] = None
             entry["candidates"] = []
@@ -198,8 +174,8 @@ def build_incident(model, seed, incident_id, acquired_utc, want_oil=True, size=5
         # which added uncertainty passes the 12 km threshold is itself a result,
         # and the timeline shows those hours being computed and then discarded.
         dr = drift_mod.backward_drift(d, prov, lat0, lon0, size, hours_back=30,
-                                      n_particles=900, n_members=12, seed=seed)
-        scen = ais_mod.load_tracks(d, dr, lat0, lon0, seed=seed, truth=release_truth)
+                                      n_particles=900, n_members=12, seed=0)
+        scen = traffic
         cands = score_mod.score_vessels(d, dr, scen, lat0, lon0)
 
         if compact:
@@ -207,8 +183,10 @@ def build_incident(model, seed, incident_id, acquired_utc, want_oil=True, size=5
                 fr["particles"] = [[round(p[0], 4), round(p[1], 4)] for p in fr["particles"][::3]]
                 fr.pop("ellipse", None)
         entry["drift"] = _strip(dr)
-        entry["release_hour_estimate"] = scen["release_hour_estimate"]
+        entry["release_hour_estimate"] = next((c["release_hour_estimate"] for c in cands
+            if c["status"] == "CANDIDATE"), None)
         entry["candidates"] = cands
+        entry["method_comparisons"] = compare_methods(d, dr, scen, lat0, lon0)
         incident["detections"].append(entry)
 
     if compact:
@@ -225,6 +203,52 @@ def build_incident(model, seed, incident_id, acquired_utc, want_oil=True, size=5
         incident["lookalikes"] = incident["lookalikes"][:10]
 
     return _strip(incident)
+
+
+def build_incident(model, seed, incident_id, acquired_utc, want_oil=True, size=512,
+                   release=None, compact=False, traffic_mode="constructed"):
+    """Simulator and post-analysis grading wrapper; not the production input API."""
+    lat0, lon0 = fields.PILOT["lat0"], fields.PILOT["lon0"]
+    incident_sim.set_origin(lat0, lon0)
+    scene_wind = release.get("wind_ms", 7.4) if release else 7.4
+    prov = fields.FieldProvider(seed=seed, mean_wind=scene_wind, wind_dir=290.0)
+    oil_cov, release_truth = None, None
+    if release:
+        oil_cov, release_truth = incident_sim.simulate_release(
+            prov, size, seed=seed, release_start_h=release["start_h"],
+            release_end_h=release["end_h"], speed_kn=release["speed_kn"],
+            course_deg=release.get("course_deg"))
+    img, mask, meta = sar_sim.generate_scene(seed, size=size, force_oil=want_oil,
+                                            oil_cov=oil_cov, mean_wind=scene_wind)
+    # Traffic generation precedes segmentation. The simulator may know truth;
+    # the analysis function receives only the same ping fields as an AIS archive.
+    labelled = {"vessels": []}
+    if release_truth:
+        ys, xs = np.nonzero(oil_cov > 0.42)
+        cx, cy = (float(xs.mean()), float(ys.mean())) if len(xs) else (size/2, size/2)
+        import geo
+        lo, la = geo.xy_to_lonlat((cx-size/2)*80, (size/2-cy)*80, lat0, lon0)
+        reference = {"centroid": [la, lo], "orientation_deg": release_truth["course_deg"] % 180}
+        if traffic_mode == "constructed":
+            labelled = ais_mod.build_truth_scenario(release_truth, reference, lat0, lon0, seed)
+        elif traffic_mode == "random":
+            labelled = ais_mod.build_random_scenario(release_truth, lat0, lon0, seed)
+        else:
+            raise ValueError("Unknown traffic mode")
+    traffic = ais_mod.observation_tracks(labelled)
+    inc = analyse_observation(model, img, traffic, prov, incident_id, acquired_utc,
+                              lat0, lon0, compact)
+    # Evaluation-only information is attached AFTER predictions are final.
+    labels = {v["mmsi"]: v.get("truth") for v in labelled["vessels"]}
+    for d in inc["detections"]:
+        for c in d.get("candidates", []): c["truth"] = labels.get(c["mmsi"])
+    inc["scene_truth"] = {"has_oil": meta["has_oil"], "n_lookalikes": meta["n_lookalikes"]}
+    inc["release_truth"] = release_truth
+    inc["truth_png"] = None if compact else _png_b64(overlay(img, mask))
+    inc["provenance"] = {"data": "synthetic", "evaluation_protocol": "observation_boundary_v2",
+        "seed": seed, "traffic": traffic_mode + " simulation; not real AIS",
+        "environment": "shared synthetic fields; not independent observed forcing"}
+    return inc
 
 
 def main():
@@ -269,8 +293,8 @@ def main():
         incidents.append(inc)
 
     metrics = {}
-    if os.path.exists("models/metrics.json"):
-        metrics = json.load(open("models/metrics.json"))
+    if os.path.exists("results/metrics.json"):
+        metrics = json.load(open("results/metrics.json"))
 
     payload = {
         "generated_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),

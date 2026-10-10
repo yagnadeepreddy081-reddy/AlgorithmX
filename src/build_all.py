@@ -1,8 +1,8 @@
 """
 Rebuild everything from source, in order.
 
-Running this on a fresh clone reproduces `public/index.html` exactly as
-shipped -- the segmentation results, the 38-scene test set, the sample tiles,
+Running this regenerates `public/index.html` from source; runtime versions
+and platform can affect numerical outputs -- the segmentation results, the 38-scene test set, the sample tiles,
 the browser weights and the console itself.
 
 Training is skipped by default because a trained checkpoint is committed at
@@ -18,6 +18,10 @@ import os
 import subprocess
 import sys
 import time
+import json
+import hashlib
+import platform
+import importlib.metadata
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -57,6 +61,10 @@ def main():
 
     run("2/6  run three incidents end to end", ["src/pipeline.py"])
     run("3/6  build the 38-scene test set", ["src/build_library.py", "--n", "30", "--n-clean", "8"])
+    run("evaluate recovery and comparison methods", ["src/evaluate_recovery.py"])
+    run("random-traffic stress evaluation", ["src/evaluate_recovery.py", "--n", "24",
+        "--traffic", "random", "--seed-base", "920000", "--parameter-seed", "20261010",
+        "--out", "out/stress.json", "--results", "results/stress-comparison.json"])
     run("4/6  build the native-scale sample tiles", ["src/build_samples.py"])
     run("5/6  export float16 weights for the browser", ["src/export_weights.py"])
     run("6/6  bake the console into one HTML file", ["src/build_console.py"])
@@ -68,6 +76,14 @@ def main():
         shutil.copyfile(src, dst)
         print("\ncopied -> public/index.html  (%.2f MB)" % (os.path.getsize(dst) / 1e6))
 
+    manifest = {"protocol": "observation_boundary_v2", "python": platform.python_version(),
+        "packages": {p: importlib.metadata.version(p) for p in
+                     ["torch", "numpy", "scipy", "scikit-image", "pillow"]},
+        "files": {p: hashlib.sha256(open(p, "rb").read()).hexdigest() for p in
+                  ["models/unet_slick.pt", "public/index.html", "results/metrics.json",
+                   "results/research-comparison.json", "results/stress-comparison.json",
+                   "docs/RESEARCH_PROTOCOL.md", "requirements-lock.txt"]}}
+    with open("public/build-manifest.json", "w") as f: json.dump(manifest, f, indent=2)
     print("\nAll done in %.0f s. Open public/index.html in any browser." % (time.time() - t0))
 
 

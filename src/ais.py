@@ -11,14 +11,13 @@ Two things happen here that matter for attribution:
 
 1. Interpolation.  AIS pings arrive every 2-10 minutes when the transponder is
    on, but the drift model works on a fixed hourly grid.  Tracks are resampled
-   onto that grid by great-circle interpolation, so "was this vessel inside the
+   onto that grid by local linear interpolation, so "was this vessel inside the
    release envelope at 03:00" becomes an answerable question.
 
 2. Dark-period detection.  A gap longer than DARK_GAP_MIN minutes while the
-   vessel is at sea is recorded as a dark period.  This is treated as evidence
-   *for* suspicion rather than as missing data -- switching the transponder off
-   is exactly what a vessel about to discharge does.  Positions inside a dark
-   period are marked interpolated and are never presented as observed fact.
+   vessel is at sea is recorded as a dark period.  A gap may reflect receiver coverage or equipment issues; it does not prove
+   intent. Positions inside gaps longer than the threshold are left unknown.
+   Short-gap interpolations are labelled separately from actual observations.
 """
 
 import math
@@ -44,6 +43,8 @@ def resample_track(pings, t_hours):
 
     Returns list of dicts per requested hour, each flagged observed/interpolated.
     """
+    if not pings:
+        return [None for _ in t_hours]
     pings = sorted(pings, key=lambda p: -p["t_h"])  # oldest first
     ts = np.array([p["t_h"] for p in pings])
     out = []
@@ -62,6 +63,9 @@ def resample_track(pings, t_hours):
         i1 = hi[np.argmax(ts[hi])]
         p0, p1 = pings[i0], pings[i1]
         gap_min = abs(p0["t_h"] - p1["t_h"]) * 60.0
+        if gap_min > DARK_GAP_MIN:
+            out.append(None)
+            continue
         if i0 == i1:
             lat, lon = p0["lat"], p0["lon"]
         else:
@@ -75,7 +79,8 @@ def resample_track(pings, t_hours):
                 "lon": round(float(lon), 6),
                 "sog_kn": float(pings[j]["sog_kn"]),
                 "cog_deg": float(pings[j]["cog_deg"]),
-                "observed": bool(gap_min <= DARK_GAP_MIN),
+                "observed": bool(i0 == i1),
+                "interpolated": bool(i0 != i1),
                 "gap_min": round(float(gap_min), 1),
             }
         )
@@ -272,121 +277,50 @@ def build_truth_scenario(truth, det, lat0, lon0, seed=0):
     return {"vessels": vessels, "release_hour_estimate": round(mid_h, 1)}
 
 
-def build_scenario(det, drift_result, lat0, lon0, seed=0):
+def observation_tracks(scenario):
+    """Copy only observed traffic fields across the simulation boundary."""
+    import copy
+    return {"vessels": [{k: copy.deepcopy(v[k]) for k in
+             ("mmsi", "name", "type", "flag", "length_m", "pings")}
+             for v in scenario["vessels"]]}
+
+
+def load_tracks(*args, **kwargs):
+    raise NotImplementedError(
+        "Supply observed traffic to analyse_observation; simulation truth must not enter analysis")
+
+
+def build_random_scenario(truth, lat0, lon0, seed=0, n_background=10):
+    """Synthetic stress traffic; background courses/locations are independent of oil.
+
+    The discharger follows the forward-simulator vessel. Competitors use a
+    separately seeded regional traffic generator, never the predicted corridor.
+    All tracks cover 30 hours, except explicitly generated observation gaps.
     """
-    Construct the AIS picture for the incident.
-
-    Deliberately includes four hard cases, because a demo that only contains an
-    obvious culprit proves nothing:
-
-      * GUILTY   -- transited the release envelope during the release window on
-                    a course aligned with the slick's principal axis
-      * DECOY    -- passed *closer* to the slick than the guilty vessel, but
-                    hours after the release window, so it is physically
-                    impossible.  The system must clear it.
-      * DARK     -- went dark inside the window but was on the wrong side of the
-                    envelope.  Suspicion is raised but distance rules it out.
-      * TRANSIT  -- ordinary lane traffic, never near the envelope.
-    """
-    rng = np.random.default_rng(seed)
-    frames = {f["hours_back"]: f for f in drift_result["frames"]}
-    usable = [f for f in drift_result["frames"] if f["usable"]]
-    # release window: the usable part of the hindcast, older half
-    h_max = max(f["hours_back"] for f in usable) if usable else 6
-    h_rel = max(3, int(h_max * 0.75))
-    origin = frames[h_rel]
-    ox, oy = geo.lonlat_to_xy(origin["lon"], origin["lat"], lat0, lon0)
-
-    slick_axis = det["orientation_deg"]
-    vessels = []
-
-    # --- guilty: on the slick axis, through the origin at h_rel -------------
-    course = (slick_axis + rng.uniform(-6, 6)) % 360
-    spd = 12.4
-    v = spd * 0.514444
-    t_from = h_rel + 7.0
-    dx = -v * math.sin(math.radians(course)) * 7.0 * 3600.0
-    dy = -v * math.cos(math.radians(course)) * 7.0 * 3600.0
-    vessels.append(
-        {
-            "mmsi": "419087341",
-            "name": "MT ARJUN PRIDE",
-            "type": "Crude oil tanker",
-            "flag": "India",
-            "length_m": 183,
-            "pings": _straight_track(lat0, lon0, (ox + dx, oy + dy), course, spd, t_from, 0.0, rng=rng),
-            "truth": "guilty",
-        }
-    )
-
-    # --- decoy: closest to the slick, but arrives after the release ---------
-    slick_x, slick_y = geo.lonlat_to_xy(det["centroid"][1], det["centroid"][0], lat0, lon0)
-    course_d = (slick_axis + 78.0) % 360
-    spd_d = 15.5
-    vd = spd_d * 0.514444
-    t_from_d = 2.5
-    dxd = -vd * math.sin(math.radians(course_d)) * 2.5 * 3600.0
-    dyd = -vd * math.cos(math.radians(course_d)) * 2.5 * 3600.0
-    vessels.append(
-        {
-            "mmsi": "477553900",
-            "name": "MV HAI FENG 09",
-            "type": "Container ship",
-            "flag": "Hong Kong",
-            "length_m": 232,
-            "pings": _straight_track(lat0, lon0, (slick_x + dxd, slick_y + dyd), course_d, spd_d, t_from_d, 0.0, rng=rng),
-            "truth": "innocent (arrived after release window)",
-        }
-    )
-
-    # --- dark-period vessel, wrong side of the envelope --------------------
-    course_k = (slick_axis + 150.0) % 360
-    spd_k = 10.8
-    vessels.append(
-        {
-            "mmsi": "538007712",
-            "name": "MT GULF SENTINEL",
-            "type": "Chemical tanker",
-            "flag": "Marshall Islands",
-            "length_m": 176,
-            "pings": _straight_track(
-                lat0, lon0, (ox + 34000, oy - 27000), course_k, spd_k, h_rel + 6.0, 0.0,
-                dark=(h_rel + 1.5, h_rel - 1.5), rng=rng,
-            ),
-            "truth": "innocent (dark period, but 30+ km away)",
-        }
-    )
-
-    # --- ordinary lane traffic ---------------------------------------------
-    for i, (nm, mm, tp, fl, ln) in enumerate(
-        [
-            ("MV SAGAR MOTI", "419001234", "Bulk carrier", "India", 199),
-            ("MV NORD SPICA", "219871200", "General cargo", "Denmark", 158),
-        ]
-    ):
-        vessels.append(
-            {
-                "mmsi": mm,
-                "name": nm,
-                "type": tp,
-                "flag": fl,
-                "length_m": ln,
-                "pings": _straight_track(
-                    lat0, lon0,
-                    (ox + rng.uniform(-70000, -45000), oy + rng.uniform(35000, 60000)),
-                    rng.uniform(0, 360), rng.uniform(9, 14), h_rel + 8.0, 0.0, rng=rng,
-                ),
-                "truth": "innocent (lane traffic)",
-            }
-        )
-
-    return {"vessels": vessels, "release_hour_estimate": h_rel}
-
-
-def load_tracks(det, drift_result, lat0, lon0, source="offline", seed=0, truth=None):
-    """Single entry point. `source='gfw'` would query Global Fishing Watch."""
-    if source != "offline":
-        raise NotImplementedError("live AIS feed not wired in the offline prototype")
-    if truth is not None:
-        return build_truth_scenario(truth, det, lat0, lon0, seed=seed)
-    return build_scenario(det, drift_result, lat0, lon0, seed=seed)
+    rng = np.random.default_rng(seed + 901)
+    mid_h = (truth["valve_open_h_before"] + truth["valve_close_h_before"]) / 2
+    rx, ry = geo.lonlat_to_xy(truth["true_release_lon"], truth["true_release_lat"], lat0, lon0)
+    angle = math.radians(truth["course_deg"])
+    speed = truth["speed_kn"] * .514444
+    start = (rx + math.sin(angle)*speed*(mid_h-30)*3600,
+             ry + math.cos(angle)*speed*(mid_h-30)*3600)
+    vessels = [dict(mmsi="419087341", name="SIMULATED DISCHARGER", type="Crude oil tanker",
+                    flag="Synthetic", length_m=183, truth="guilty - released the oil",
+                    pings=_straight_track(lat0,lon0,start,truth["course_deg"],
+                                          truth["speed_kn"],30,0,rng=rng))]
+    types = ["Container ship", "Chemical tanker", "Crude oil tanker", "Fishing vessel"]
+    for i in range(n_background):
+        course = float(rng.uniform(0,360)); knots = float(rng.uniform(5,18))
+        # Position at acquisition is distributed in an independent regional box.
+        end_x,end_y = rng.uniform(-55000,55000,size=2)
+        a = math.radians(course); velocity = knots*.514444
+        start = (end_x-math.sin(a)*velocity*30*3600,
+                 end_y-math.cos(a)*velocity*30*3600)
+        dark = None
+        if rng.random() < .35:
+            older = float(rng.uniform(2,25)); dark=(older,older-float(rng.uniform(.8,3)))
+        vessels.append(dict(mmsi=str(900000000+i),name="BACKGROUND %02d" % i,
+            type=str(rng.choice(types)),flag="Synthetic",length_m=int(rng.integers(50,250)),
+            truth="innocent - random regional traffic",
+            pings=_straight_track(lat0,lon0,start,course,knots,30,0,dark=dark,rng=rng)))
+    return {"vessels": vessels}
